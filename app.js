@@ -18,13 +18,13 @@
 
 // printProfileData(profileDataArgs);
 
-// const fs = require('fs');
+const fs = require('fs');
 
 // const profileDataArgs = process.argv.slice(2);
 
 // const [name, github] = profileDataArgs;
 
-// const generatePage = require('./src/page-template');
+const generatePage = require('./src/page-template');
 
 // fs.writeFile('./index.html', generatePage, err => {
 //     if (err) throw new Error(err);
@@ -33,6 +33,7 @@
 // });
 
 const inquirer = require('inquirer');
+// const { fdatasyncSync, fstat } = require('fs');
 
 // console.log(inquirer)
 
@@ -73,7 +74,7 @@ const promptUser = () => {
           name: 'about',
           message: 'Provide some information about yourself:',
           // inquirer passes existing information as an object allowing user to access the info for evaluation
-          when: confirmAbout => confirmAbout,
+          when: ({confirmAbout}) => confirmAbout,
           validate: userInput => !!(userInput.trim() || console.log('Please enter something about yourself!'))
         }
       ]);
@@ -142,11 +143,64 @@ const promptProject = portfolioData => {
   //   console.log(portfolioData);
   // });
 
+  const testQuestions = {
+    name: 'Lernantino',
+    github: 'lernantino',
+    confirmAbout: true,
+    about:
+      'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
+    projects: [
+      {
+        name: 'Run Buddy',
+        description:
+          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+        languages: ['HTML', 'CSS'],
+        link: 'https://github.com/lernantino/run-buddy',
+        feature: true,
+        confirmAddProject: true
+      },
+      {
+        name: 'Taskinator',
+        description:
+          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+        languages: ['JavaScript', 'HTML', 'CSS'],
+        link: 'https://github.com/lernantino/taskinator',
+        feature: true,
+        confirmAddProject: true
+      },
+      {
+        name: 'Taskmaster Pro',
+        description:
+          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+        languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
+        link: 'https://github.com/lernantino/taskmaster-pro',
+        feature: false,
+        confirmAddProject: true
+      },
+      {
+        name: 'Robot Gladiators',
+        description:
+          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
+        languages: ['JavaScript'],
+        link: 'https://github.com/lernantino/robot-gladiators',
+        feature: false,
+        confirmAddProject: false
+      }
+    ]
+  };
+
   (async () => {
     try {
-      const answers = await promptUser();
-      const projectAnswers = await promptProject(answers);
-      console.log(projectAnswers);
+      // const answers = await promptUser();
+      // const projectAnswers = await promptProject(answers);
+      const pageHTML = await generatePage(testQuestions);
+      console.log(pageHTML)
+      await fs.promises.writeFile('./index.html', pageHTML, err => {
+        if (err) throw new Error(err);
+
+        console.log('Page created! Check out the index.html in this directory to see it!')
+      })
+      // console.log(projectAnswers);
     } catch (err){
       console.log(err);
     }

@@ -63,9 +63,17 @@ const promptUser = () => {
           validate: userName => !!(userName.trim() || console.log('Please enter your Github username!'))
         },
         {
+          type: 'confirm',
+          name: 'confirmAbout',
+          message: 'Would you like to enter some information about yourself for an "About" section?',
+          default: true
+        },
+        {
           type: 'input',
           name: 'about',
           message: 'Provide some information about yourself:',
+          // inquirer passes existing information as an object allowing user to access the info for evaluation
+          when: confirmAbout => confirmAbout,
           validate: userInput => !!(userInput.trim() || console.log('Please enter something about yourself!'))
         }
       ]);

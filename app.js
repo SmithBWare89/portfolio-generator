@@ -194,8 +194,7 @@ const promptProject = portfolioData => {
       // const answers = await promptUser();
       // const projectAnswers = await promptProject(answers);
       const pageHTML = await generatePage(testQuestions);
-      console.log(pageHTML)
-      await fs.promises.writeFile('./index.html', pageHTML, err => {
+      await fs.promises.writeFile('./dist/index.html', pageHTML, err => {
         if (err) throw new Error(err);
 
         console.log('Page created! Check out the index.html in this directory to see it!')

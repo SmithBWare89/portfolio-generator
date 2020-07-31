@@ -18,13 +18,14 @@
 
 // printProfileData(profileDataArgs);
 
-const fs = require('fs');
+// const fs = require('fs');
 
 // const profileDataArgs = process.argv.slice(2);
 
 // const [name, github] = profileDataArgs;
 
 const generatePage = require('./src/page-template');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 
 // fs.writeFile('./index.html', generatePage, err => {
 //     if (err) throw new Error(err);
@@ -191,16 +192,15 @@ const promptProject = portfolioData => {
 
   (async () => {
     try {
-      // const answers = await promptUser();
-      // const projectAnswers = await promptProject(answers);
-      const pageHTML = await generatePage(testQuestions);
-      await fs.promises.writeFile('./dist/index.html', pageHTML, err => {
-        if (err) throw new Error(err);
-
-        console.log('Page created! Check out the index.html in this directory to see it!')
-      })
+      const userAnswers = await promptUser();
+      const pageHTML = await promptProject(userAnswers);
+      const writeProject = await writeFile(pageHTML);
+      console.log(writeProject);
+      const copyFileResponse = await copyFile();
+      console.log(copyFileResponse);
+      });
       // console.log(projectAnswers);
-    } catch (err){
+    } catch (err) {
       console.log(err);
     }
   })();
